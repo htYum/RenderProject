@@ -1,9 +1,9 @@
 ﻿#ifndef BASESHADER_H
 #define BASESHADER_H
 
-#include "v2f.h"
-#include "mymath.h"
-#include "vertex.h"
+#include "RenderLoop/v2f.h"
+#include "Math/MyMath.h"
+#include "RenderLoop/vertex.h"
 class BaseShader
 {
 public:

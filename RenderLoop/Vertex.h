@@ -1,7 +1,7 @@
 ﻿#ifndef VERTEX_H
 #define VERTEX_H
 
-#include "mymath.h"
+#include "Math/mymath.h"
 
 class Vertex
 {

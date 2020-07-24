@@ -1,8 +1,8 @@
 ﻿#ifndef PIPELINE_H
 #define PIPELINE_H
 
-#include "myshader.h"
-#include "framebuffer.h"
+#include "Shader/myshader.h"
+#include "RenderLoop/framebuffer.h"
 
 enum ShadingMode{
     simple

@@ -37,7 +37,7 @@ void MainWindow::fpsTimeOut()
 {
     int fps = renderLoop->getFps();
     renderLoop->setFpsZero();
-    this->setWindowTitle(QString(" fps: %1").arg(fps));
+    this->setWindowTitle(QString("Render fps: %1").arg(fps));
 }
 
 void MainWindow::paintEvent(QPaintEvent* event)

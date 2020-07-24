@@ -10,7 +10,7 @@
 #include <QPixmap>
 #include <QPainter>
 
-#include "renderloop.h"
+#include "RenderLoop/renderloop.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

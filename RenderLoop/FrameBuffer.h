@@ -1,7 +1,7 @@
 ﻿#ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
-#include "mymath.h"
+#include "Math/mymath.h"
 #include <vector>
 
 class FrameBuffer

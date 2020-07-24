@@ -1,7 +1,7 @@
 ﻿#ifndef V2F_H
 #define V2F_H
 
-#include "mymath.h"
+#include "Math/mymath.h"
 
 class V2F
 {

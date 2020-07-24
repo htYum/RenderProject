@@ -32,49 +32,49 @@ if(ANDROID)
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
-    mymath.cpp
-    mymath.h
-    framebuffer.h
-    framebuffer.cpp
-    vertex.h
-    vertex.cpp
-    v2f.h
-    v2f.cpp
-    mesh.h
-    mesh.cpp
-    baseshader.h
-    baseshader.cpp
-    myshader.h
-    myshader.cpp
-    renderloop.h
-    renderloop.cpp
-    pipeline.h
-    pipeline.cpp
+    Math/mymath.cpp
+    Math/mymath.h
+    RenderLoop/framebuffer.h
+    RenderLoop/framebuffer.cpp
+    RenderLoop/vertex.h
+    RenderLoop/vertex.cpp
+    RenderLoop/v2f.h
+    RenderLoop/v2f.cpp
+    RenderLoop/mesh.h
+    RenderLoop/mesh.cpp
+    Shader/baseshader.h
+    Shader/baseshader.cpp
+    Shader/myshader.h
+    Shader/myshader.cpp
+    RenderLoop/renderloop.h
+    RenderLoop/renderloop.cpp
+    RenderLoop/pipeline.h
+    RenderLoop/pipeline.cpp
   )
 else()
   add_executable(RenderProject
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
-    mymath.cpp
-    mymath.h
-    framebuffer.h
-    framebuffer.cpp
-    vertex.h
-    vertex.cpp
-    v2f.h
-    v2f.cpp
-    mesh.h
-    mesh.cpp
-    baseshader.h
-    baseshader.cpp
-    myshader.h
-    myshader.cpp
-    renderloop.h
-    renderloop.cpp
-    pipeline.h
-    pipeline.cpp
+      main.cpp
+      mainwindow.cpp
+      mainwindow.h
+      mainwindow.ui
+      Math/mymath.cpp
+      Math/mymath.h
+      RenderLoop/framebuffer.h
+      RenderLoop/framebuffer.cpp
+      RenderLoop/vertex.h
+      RenderLoop/vertex.cpp
+      RenderLoop/v2f.h
+      RenderLoop/v2f.cpp
+      RenderLoop/mesh.h
+      RenderLoop/mesh.cpp
+      Shader/baseshader.h
+      Shader/baseshader.cpp
+      Shader/myshader.h
+      Shader/myshader.cpp
+      RenderLoop/renderloop.h
+      RenderLoop/renderloop.cpp
+      RenderLoop/pipeline.h
+      RenderLoop/pipeline.cpp
   )
 endif()
 

@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>SoftRenderer</string>
+   <string>Renderer</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
  </widget>
