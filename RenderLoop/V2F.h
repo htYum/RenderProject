@@ -6,7 +6,7 @@
 class V2F
 {
 public:
-    vec4 worldPos;
+    vec4 worldTransPos;
     vec4 proPos;    // projection space position
     vec4 color;
     vec2 texCoord;
@@ -16,14 +16,14 @@ public:
     V2F() = default;
     ~V2F() = default;
     V2F(const vec4& _wPos,const vec4& _pPos, const vec4& _col, const vec2& _tex, const vec3& _nor, double _oneDivZ):
-        worldPos(_wPos),
+        worldTransPos(_wPos),
         proPos(_pPos),
         color(_col),
         texCoord(_tex),
         normal(_nor),
         oneDivZ(_oneDivZ){}
     V2F(const V2F& _v2f):
-        worldPos(_v2f.worldPos),
+        worldTransPos(_v2f.worldTransPos),
         proPos(_v2f.proPos),
         color(_v2f.color),
         texCoord(_v2f.texCoord),

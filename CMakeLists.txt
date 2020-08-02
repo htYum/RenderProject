@@ -50,6 +50,8 @@ if(ANDROID)
     RenderLoop/renderloop.cpp
     RenderLoop/pipeline.h
     RenderLoop/pipeline.cpp
+    RenderLoop/Texture2D.h
+    RenderLoop/Texture2D.cpp
   )
 else()
   add_executable(RenderProject
@@ -75,6 +77,8 @@ else()
       RenderLoop/renderloop.cpp
       RenderLoop/pipeline.h
       RenderLoop/pipeline.cpp
+      RenderLoop/Texture2D.h
+      RenderLoop/Texture2D.cpp
   )
 endif()
 

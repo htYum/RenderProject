@@ -8,7 +8,8 @@ PipeLine::PipeLine(int _width, int _height):
     height(_height),
     shader(nullptr),
     frontBuffer(nullptr),
-    backBuffer(nullptr)
+    backBuffer(nullptr),
+    texture(nullptr)
 {
 }
 
@@ -25,10 +26,13 @@ void PipeLine::initialize()
     if(shader)delete shader;
     if(frontBuffer)delete frontBuffer;
     if(backBuffer)delete backBuffer;
+    if(texture)delete texture;
 
     frontBuffer = new FrameBuffer(width, height);
     backBuffer = new FrameBuffer(width, height);
     shader = new MyShader();
+    texture = new Texture2D();
+    texture->loadImage("texture.jpg");
 }
 
 void PipeLine::clearBuffer(const vec4 &color, bool depth)
@@ -46,12 +50,10 @@ void PipeLine::setIndexBuffer(const std::vector<unsigned int> _index)
     indices = _index;
 }
 
-void PipeLine::setShaderMode(ShadingMode mode)
+void PipeLine::setShader(MyShader* _s)
 {
-    if(shader)delete shader;
-    if(mode == simple){
-        shader = new MyShader();
-    }
+    shader = _s;
+    shader->setTexture(texture);
 }
 
 void PipeLine::swapBuffer()
@@ -72,10 +74,18 @@ void PipeLine::draw(RenderMode mode)
         a = vertices[indices[i++]];
         b = vertices[indices[i++]];
         c = vertices[indices[i++]];
+
         V2F v1,v2,v3;
         v1 = shader->vertexShader(a);
         v2 = shader->vertexShader(b);
         v3 = shader->vertexShader(c);
+        perspectDiv(v1);
+        perspectDiv(v2);
+        perspectDiv(v3);
+
+        if(backFaceCullint(v1.proPos,v2.proPos,v3.proPos))continue;
+//        if(shouleBeClip(v1,v2,v3))continue;
+
         v1.proPos = viewPortMat*v1.proPos;
         v2.proPos = viewPortMat*v2.proPos;
         v3.proPos = viewPortMat*v3.proPos;
@@ -231,26 +241,64 @@ void PipeLine::scanLineDraw(const V2F &left, const V2F &right)
 {
     int length = right.proPos.x - left.proPos.x + 1;
     V2F current;
-    vec4 color;
     for(int i = 0; i <= length; ++i){
         float factor = static_cast<float>(i)/length;
+        current = v2fLerp(left,right,factor);
         current.proPos.x = left.proPos.x + i;
         current.proPos.y = left.proPos.y;
-        current.color = left.color*(1.0f-factor)+right.color*factor;
-        color = shader->fragmentShader(current);
-        backBuffer->drawPixel(current.proPos.x,current.proPos.y,shader->fragmentShader(current));
+
+        float depth = backBuffer->getDepth(current.proPos.x,current.proPos.y);
+        if(current.proPos.z>depth)continue;
+        backBuffer->setDepth(current.proPos.x,current.proPos.y,current.proPos.z);
+
+        float w = 1.0/current.oneDivZ;
+        current.worldTransPos *= w;
+        current.normal *= w;
+        current.color *= w;
+        current.texCoord *= w;
+        current.color = shader->fragmentShader(current);
+        backBuffer->drawPixel(current.proPos.x,current.proPos.y,current.color);
 
     }
+}
+
+void PipeLine::perspectDiv(V2F &v)
+{
+    v.proPos /= v.proPos.w;
+    v.proPos.w = 1.0f;
+    v.proPos.z = (v.proPos.z + 1.0)*0.5;
+}
+
+bool PipeLine::shouleBeClip(const V2F &v1, const V2F &v2, const V2F &v3)
+{
+    if(v1.proPos.z>1.0f && v2.proPos.z>1.0f && v3.proPos.z>1.0f)return true;
+    if(v1.proPos.z<-1.0f && v2.proPos.z<-1.0f && v3.proPos.z<-1.0f)return true;
+    float minx,miny,maxx,maxy;
+    minx = fmin(v1.proPos.x,fmin(v2.proPos.x,v3.proPos.x));
+    miny = fmin(v1.proPos.y,fmin(v2.proPos.y,v3.proPos.y));
+    maxx = fmax(v1.proPos.x,fmax(v2.proPos.x,v3.proPos.x));
+    maxy = fmax(v1.proPos.y,fmax(v2.proPos.y,v3.proPos.y));
+    if(minx<-1.0f || maxx>1.0f || miny<-1.0f || maxy>1.0f)return true;
+    return false;
+}
+
+bool PipeLine::backFaceCullint(const vec4 &v1, const vec4 &v2, const vec4 &v3)
+{
+    vec3 tmp1 = vec3(v2.x-v1.x,v2.y-v1.y,v2.z-v1.z);
+    vec3 tmp2 = vec3(v3.x-v1.x,v3.y-v1.y,v3.z-v1.z);
+    vec3 normal = cross(tmp1,tmp2);
+    vec3 view(0,0,1);
+    return dot(view,normal)<0;
 }
 
 V2F PipeLine::v2fLerp(const V2F &a, const V2F &b, float factor)
 {
     V2F result;
-    result.worldPos = lerp(a.worldPos,b.worldPos,factor);
+    result.worldTransPos = lerp(a.worldTransPos,b.worldTransPos,factor);
     result.proPos = lerp(a.proPos,b.proPos,factor);
     result.color = lerp(a.color,b.color,factor);
     result.normal = lerp(a.normal,b.normal,factor);
     result.texCoord = lerp(a.texCoord,b.texCoord,factor);
-    result.oneDivZ = a.oneDivZ*(1.0f-factor)+b.oneDivZ;
+    result.oneDivZ = a.oneDivZ*(1.0f-factor)+b.oneDivZ*factor;
     return result;
 }

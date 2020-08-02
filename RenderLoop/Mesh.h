@@ -28,6 +28,7 @@ public:
     void testTriangle(const vec3& v1, const vec3& v2, const vec3& v3, const vec4& col1, const vec4& col2, const vec4& col3);
     void testSquare(const vec3& v1,const vec3& v2,const vec3& v3,const vec3& v4,
                     const vec4& col1,const vec4& col2,const vec4& col3,const vec4& col4);
+    void testBox(float x,float y,float z);
 };
 
 #endif // MESH_H

@@ -2,7 +2,7 @@
 #define MYMATH_H
 
 #include <cmath>
-
+#define PI 3.14159265
 class vec2
 {
 public:
@@ -167,4 +167,20 @@ vec2 lerp(const vec2& a,const vec2& b,float factor);
 vec3 lerp(const vec3& a,const vec3& b,float factor);
 vec4 lerp(const vec4& a,const vec4& b,float factor);
 
+vec2 normalize(vec2& vec);
+vec3 normalize(vec3& vec);
+vec4 normalize(vec4& vec);
+
+mat4x4 translate(mat4x4& matrix, const vec3& _trans);
+mat4x4 scale(mat4x4& matrix, const vec3& _scale);
+mat4x4 rotate(mat4x4& matrix, float angle, const vec3& axis);
+
+mat4x4 perspective(float fovy, float aspect, float near, float far);    // input angle
+
+mat4x4 lookAt(const vec3& eye, const vec3& center, const vec3& up);
+// eye      相机在世界中的位置
+// center   相机对准的物体在世界中的位置
+// up       相机的up在世界中的方向
+
+mat4x4 rotateX(mat4x4& matrix, float angle);
 #endif // MYMATH_H

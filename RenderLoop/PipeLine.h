@@ -3,6 +3,7 @@
 
 #include "Shader/myshader.h"
 #include "RenderLoop/framebuffer.h"
+#include "RenderLoop/Texture2D.h"
 
 enum ShadingMode{
     simple
@@ -21,6 +22,7 @@ private:
     FrameBuffer* frontBuffer;
     FrameBuffer* backBuffer;
     mat4x4 viewPortMat;
+    Texture2D* texture;
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
@@ -32,7 +34,7 @@ public:
     void clearBuffer(const vec4& color, bool depth = false);
     void setVertexBuffer(const std::vector<Vertex>& _ver);
     void setIndexBuffer(const std::vector<unsigned int> _index);
-    void setShaderMode(ShadingMode mode);
+    void setShader(MyShader* _s);
     void setRenderMode(RenderMode mode);
     void swapBuffer();
     unsigned char* outPut(){return frontBuffer->getColorBuffer();}
@@ -42,6 +44,9 @@ public:
     void downTriangle(const V2F& v1,const V2F& v2, const V2F& v3);
     void upTriangle(const V2F& v1, const V2F& v2, const V2F& v3);
     void scanLineDraw(const V2F& left, const V2F& right);
+    void perspectDiv(V2F& v);
+    bool shouleBeClip(const V2F& v1, const V2F& v2, const V2F& v3);
+    bool backFaceCullint(const vec4& v1, const vec4& v2, const vec4& v3);
 
     V2F v2fLerp(const V2F& a, const V2F& b, float factor);
 };

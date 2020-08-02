@@ -2,9 +2,17 @@
 #define MYSHADER_H
 
 #include "baseshader.h"
+#include "RenderLoop/Texture2D.h"
 
 class MyShader : public BaseShader
 {
+private:
+    mat4x4 model;
+    mat4x4 view;
+    mat4x4 projection;
+
+    Texture2D* texture;
+
 public:
     MyShader() = default;
     ~MyShader() = default;
@@ -14,6 +22,7 @@ public:
     virtual void setMat4Moedl(const mat4x4& _world);
     virtual void setMat4View(const mat4x4& _view);
     virtual void setMat4Projection(const mat4x4& _projection);
+    void setTexture(Texture2D* _tex);
 };
 
 #endif // MYSHADER_H
