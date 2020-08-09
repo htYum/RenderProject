@@ -32,8 +32,15 @@ if(ANDROID)
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
-    Math/mymath.cpp
-    Math/mymath.h
+    Math/detail/Matrix4x4.h
+    Math/detail/Matrix4x4.cpp
+    Math/detail/vec2.h
+    Math/detail/vec2.cpp
+    Math/detail/vec3.h
+    Math/detail/vec3.cpp
+    Math/detail/vec4.h
+    Math/detail/vec4.cpp
+    Math/MyMath.h
     RenderLoop/framebuffer.h
     RenderLoop/framebuffer.cpp
     RenderLoop/vertex.h
@@ -52,6 +59,12 @@ if(ANDROID)
     RenderLoop/pipeline.cpp
     RenderLoop/Texture2D.h
     RenderLoop/Texture2D.cpp
+    Control/Camera.h
+    Control/Camera.cpp
+    Math/Quaternion.h
+    Math/Quaternion.cpp
+    Math/detail/Functions.h
+    Math/detail/Functions.cpp
   )
 else()
   add_executable(RenderProject
@@ -59,8 +72,15 @@ else()
       mainwindow.cpp
       mainwindow.h
       mainwindow.ui
-      Math/mymath.cpp
-      Math/mymath.h
+      Math/detail/Matrix4x4.h
+      Math/detail/Matrix4x4.cpp
+      Math/detail/vec2.h
+      Math/detail/vec2.cpp
+      Math/detail/vec3.h
+      Math/detail/vec3.cpp
+      Math/detail/vec4.h
+      Math/detail/vec4.cpp
+      Math/MyMath.h
       RenderLoop/framebuffer.h
       RenderLoop/framebuffer.cpp
       RenderLoop/vertex.h
@@ -79,6 +99,12 @@ else()
       RenderLoop/pipeline.cpp
       RenderLoop/Texture2D.h
       RenderLoop/Texture2D.cpp
+      Control/Camera.h
+      Control/Camera.cpp
+      Math/Quaternion.h
+      Math/Quaternion.cpp
+      Math/detail/Functions.h
+      Math/detail/Functions.cpp
   )
 endif()
 

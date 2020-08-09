@@ -15,7 +15,7 @@ private:
 
 public:
     MyShader() = default;
-    ~MyShader() = default;
+    virtual ~MyShader();
 
     virtual V2F vertexShader(const Vertex& _ver);
     virtual vec4 fragmentShader(const V2F& _v2f);

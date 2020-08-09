@@ -4,6 +4,7 @@
 #include <QObject>
 #include "pipeline.h"
 #include "mesh.h"
+#include "Control/Camera.h"
 
 class RenderLoop : public QObject
 {
@@ -15,6 +16,8 @@ public:
     int getFps(){return fps;}
     void setFpsZero(){fps = 0;}
     void stop(){bStop = true;}
+    void processKey(char key);
+    void processMouse(float deltaX, float deltaY);
 
 signals:
     void frameOut(unsigned char* image);
@@ -26,6 +29,8 @@ private:
     bool bStop;
     int fps;
     PipeLine* pipeLine;
+    MyShader* shader;
+    Camera* camera;
 
 
 

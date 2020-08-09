@@ -1,5 +1,10 @@
 ﻿#include "myshader.h"
 
+MyShader::~MyShader()
+{
+    texture = nullptr;
+}
+
 V2F MyShader::vertexShader(const Vertex &_ver)
 {
     V2F result;

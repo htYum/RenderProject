@@ -9,6 +9,8 @@
 #include <QThread>
 #include <QPixmap>
 #include <QPainter>
+#include <QKeyEvent>
+#include <QMouseEvent>
 
 #include "RenderLoop/renderloop.h"
 
@@ -24,6 +26,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void keyPressEvent(QKeyEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
+
 public slots:
     void fpsTimeOut();
     void receiveFrameBuffer(unsigned char* image);
@@ -35,6 +40,9 @@ private:
     QTimer* timer;
     QThread* loopThread;
     RenderLoop* renderLoop;
+
+    bool firstMouseMove;
+    QPoint lastMousePos;
 
 };
 #endif // MAINWINDOW_H
