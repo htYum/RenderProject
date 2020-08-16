@@ -60,7 +60,7 @@ void RenderLoop::loop()
     Model* myModel = new Model("C:\\Users\\侯祖光\\desktop\\Model\\neptune\\neptune.obj");
 
     Texture2D* bodyTex = new Texture2D();
-    bodyTex->loadImage("C:\\Users\\侯祖光\\desktop\\Model\\neptune\\Texf_body02.jpg");
+    bodyTex->loadImage("C:\\Users\\侯祖光\\desktop\\Model\\neptune\\Tex002f_body02.jpg");
     Material* bodyMat = new Material();
     bodyMat->setTexture(bodyTex);
     myModel->meshes[2].setMaterial(bodyMat);
