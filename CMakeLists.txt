@@ -43,12 +43,12 @@ if(ANDROID)
     Math/MyMath.h
     RenderLoop/framebuffer.h
     RenderLoop/framebuffer.cpp
-    RenderLoop/vertex.h
-    RenderLoop/vertex.cpp
+    RenderLoop/Model/vertex.h
+    RenderLoop/Model/vertex.cpp
     RenderLoop/v2f.h
     RenderLoop/v2f.cpp
-    RenderLoop/mesh.h
-    RenderLoop/mesh.cpp
+    RenderLoop/Model/mesh.h
+    RenderLoop/Model/mesh.cpp
     Shader/baseshader.h
     Shader/baseshader.cpp
     Shader/myshader.h
@@ -57,14 +57,18 @@ if(ANDROID)
     RenderLoop/renderloop.cpp
     RenderLoop/pipeline.h
     RenderLoop/pipeline.cpp
-    RenderLoop/Texture2D.h
-    RenderLoop/Texture2D.cpp
+    RenderLoop/Model/Texture2D.h
+    RenderLoop/Model/Texture2D.cpp
     Control/Camera.h
     Control/Camera.cpp
     Math/Quaternion.h
     Math/Quaternion.cpp
     Math/detail/Functions.h
     Math/detail/Functions.cpp
+    RenderLoop/Model/Model.h
+    RenderLoop/Model/Model.cpp
+    RenderLoop/Model/Material.h
+    RenderLoop/Model/Material.cpp
   )
 else()
   add_executable(RenderProject
@@ -83,12 +87,12 @@ else()
       Math/MyMath.h
       RenderLoop/framebuffer.h
       RenderLoop/framebuffer.cpp
-      RenderLoop/vertex.h
-      RenderLoop/vertex.cpp
+      RenderLoop/Model/vertex.h
+      RenderLoop/Model/vertex.cpp
       RenderLoop/v2f.h
       RenderLoop/v2f.cpp
-      RenderLoop/mesh.h
-      RenderLoop/mesh.cpp
+      RenderLoop/Model/mesh.h
+      RenderLoop/Model/mesh.cpp
       Shader/baseshader.h
       Shader/baseshader.cpp
       Shader/myshader.h
@@ -97,14 +101,18 @@ else()
       RenderLoop/renderloop.cpp
       RenderLoop/pipeline.h
       RenderLoop/pipeline.cpp
-      RenderLoop/Texture2D.h
-      RenderLoop/Texture2D.cpp
+      RenderLoop/Model/Texture2D.h
+      RenderLoop/Model/Texture2D.cpp
       Control/Camera.h
       Control/Camera.cpp
       Math/Quaternion.h
       Math/Quaternion.cpp
       Math/detail/Functions.h
       Math/detail/Functions.cpp
+      RenderLoop/Model/Model.h
+      RenderLoop/Model/Model.cpp
+      RenderLoop/Model/Material.h
+      RenderLoop/Model/Material.cpp
   )
 endif()
 

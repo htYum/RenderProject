@@ -20,7 +20,6 @@ bool Texture2D::loadImage(const std::string &path)
     if(pixelBuffer == nullptr){
         qDebug()<<"Failed to load image from : "<<QString::fromStdString(path);
     }
-    unsigned char* p = pixelBuffer;
     return pixelBuffer != nullptr;
 }
 
@@ -28,47 +27,37 @@ vec4 Texture2D::sampler2D(const vec2 &texCoord)
 {
     vec4 result;
     if(pixelBuffer == nullptr)return result;
-    int x = 0, y = 0;
+    float x = texCoord.x;
+    float y = texCoord.y;
     float u = 0, v = 0;
-    if(texCoord.x >= 0 && texCoord.x <= 1.0f && texCoord.y >= 0 && texCoord.y <= 1.0f){
-        float trueU = texCoord.x*(width - 1);
-        float trueV = texCoord.y*(height - 1);
-        x = static_cast<int>(trueU);
-        y = static_cast<int>(trueV);
-        u = trueU - x;
-        v = trueV - y;
-    }
-    else{
-        if(texCoord.x > 1.0f)
-            u = texCoord.x - static_cast<int>(texCoord.x);
-        else if(texCoord.x < 0)
-            u = 1.0f - (static_cast<int>(texCoord.x) - texCoord.x);
-        if(texCoord.y > 1.0f)
-            v = texCoord.y - static_cast<int>(texCoord.y);
-        else if(texCoord.y < 0)
-            v = 1.0f - (static_cast<int>(texCoord.y) - texCoord.y);
-        float trueU = u*(width - 1);
-        float trueV = v*(width - 1);
-        x = static_cast<int>(trueU);
-        y = static_cast<int>(trueV);
-        u = trueU - x;
-        v = trueV - y;
-    }
+    // repeat
+    if(x < 0) x = 1 - x;
+    if(y < 0) y = 1 - y;
+    while(x > 1)x -= 1;
+    while(y > 1)y -= 1;
+
+    x *= width - 1;
+    y *= height - 1;
+    u = x - static_cast<int>(x);
+    v = y - static_cast<int>(y);
+    x = static_cast<int>(x);
+    y = static_cast<int>(y);
+
     vec3 texels[4];
     int index[4];
-    index[0] = (x*width + y)*nChannel;
+    index[0] = (y*width + x)*nChannel;
     if(y + 1 >= height)
         index[1] = index[0];
     else
-        index[1] = (x * width + y + 1) * nChannel;
+        index[1] = (y * width + x + 1) * nChannel;
     if(y + 1 >= height || x + 1 >= width)
         index[2] = index[0];
     else
-        index[2] = ((x + 1) * width + y + 1) * nChannel;
+        index[2] = ((y + 1) * width + x + 1) * nChannel;
     if(x + 1 >= width)
         index[3] = index[0];
     else
-        index[3] = ((x + 1) * width + y) * nChannel;
+        index[3] = ((y + 1) * width + x) * nChannel;
 
     // left bottom
     texels[0].x = pixelBuffer[index[0] + 0]*COL_SCALE;
@@ -98,4 +87,26 @@ vec4 Texture2D::sampler2D(const vec2 &texCoord)
     result = texels[0] * (1.0 - v) + texels[1] *v;
 
     return result;
+
+
+//***********************************************************
+//***********************************************************
+
+
+//    vec4 result;
+//    float x = texCoord.x;
+//    float y = texCoord.y;
+//    while(x>=1)x-=1;
+//    while(y>=1)y-=1;
+//    x = x*(width-1);
+//    y = y*(height-1);
+//    x = static_cast<int>(x);
+//    y = static_cast<int>(y);
+//    int index = nChannel*(y*width + x);
+//    result.x = static_cast<float>(pixelBuffer[index])*COL_SCALE;
+//    result.y = static_cast<float>(pixelBuffer[index+1])*COL_SCALE;
+//    result.z = static_cast<float>(pixelBuffer[index+2])*COL_SCALE;
+//    result.w = 1.0f;
+
+//    return result;
 }

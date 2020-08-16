@@ -2,7 +2,7 @@
 
 MyShader::~MyShader()
 {
-    texture = nullptr;
+//    texture = nullptr;
 }
 
 V2F MyShader::vertexShader(const Vertex &_ver)
@@ -18,7 +18,7 @@ V2F MyShader::vertexShader(const Vertex &_ver)
     return result;
 }
 
-vec4 MyShader::fragmentShader(const V2F &_v2f)
+vec4 MyShader::fragmentShader(const V2F &_v2f, Texture2D* texture)
 {
     vec4 color = texture->sampler2D(_v2f.texCoord);
     return color;
@@ -39,7 +39,7 @@ void MyShader::setMat4Projection(const mat4x4 &_projection)
     projection = _projection;
 }
 
-void MyShader::setTexture(Texture2D *_tex)
-{
-    texture = _tex;
-}
+//void MyShader::setTexture(Texture2D *_tex)
+//{
+//    texture = _tex;
+//}

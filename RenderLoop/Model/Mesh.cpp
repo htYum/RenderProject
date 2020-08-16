@@ -204,3 +204,8 @@ void Mesh::testBox(float x, float y, float z)
     indices[34] = 22;
     indices[35] = 23;
 }
+
+void Mesh::setMaterial(Material *_mat)
+{
+    material = _mat;
+}

@@ -6,54 +6,30 @@
 PipeLine::PipeLine(int _width, int _height):
     width(_width),
     height(_height),
-    shader(nullptr),
     frontBuffer(nullptr),
     backBuffer(nullptr),
-    texture(nullptr)
+    nowShader(nullptr)
 {
 }
 
 PipeLine::~PipeLine()
 {
-    if(shader)delete shader;
     if(frontBuffer)delete frontBuffer;
     if(backBuffer)delete backBuffer;
-    shader = nullptr;
 }
 
 void PipeLine::initialize()
 {
-    if(shader)delete shader;
     if(frontBuffer)delete frontBuffer;
     if(backBuffer)delete backBuffer;
-    if(texture)delete texture;
 
     frontBuffer = new FrameBuffer(width, height);
     backBuffer = new FrameBuffer(width, height);
-    shader = new MyShader();
-    texture = new Texture2D();
-    texture->loadImage("texture.jpg");
 }
 
 void PipeLine::clearBuffer(const vec4 &color, bool depth)
 {
     backBuffer->clearColorBuffer(color);
-}
-
-void PipeLine::setVertexBuffer(const std::vector<Vertex> &_ver)
-{
-    vertices = _ver;
-}
-
-void PipeLine::setIndexBuffer(const std::vector<unsigned int> _index)
-{
-    indices = _index;
-}
-
-void PipeLine::setShader(MyShader* _s)
-{
-    shader = _s;
-    shader->setTexture(texture);
 }
 
 void PipeLine::swapBuffer()
@@ -63,97 +39,103 @@ void PipeLine::swapBuffer()
     backBuffer = temp;
 }
 
-void PipeLine::draw(RenderMode mode)
+void PipeLine::setModel(Model *_model)
 {
-    if(indices.empty())return;
-    viewPortMat = getViewPortMatrix(0,0,width,height);
-    QTime t;
-    t.start();
-    for(int i = 0; i < indices.size();  ){
-        Vertex a,b,c;
-        a = vertices[indices[i++]];
-        b = vertices[indices[i++]];
-        c = vertices[indices[i++]];
+    model = _model;
+}
 
-        V2F v1,v2,v3;
-        v1 = shader->vertexShader(a);
-        v2 = shader->vertexShader(b);
-        v3 = shader->vertexShader(c);
-        perspectDiv(v1);
-        perspectDiv(v2);
-        perspectDiv(v3);
+void PipeLine::draw()
+{
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+    for(int m = 0; m < model->meshes.size(); ++m){
+        vertices = (*model).meshes[m].vertices;
+        indices = (*model).meshes[m].indices;
+        meshIndex = m;
+        if(indices.empty())return;
 
-        if(backFaceCullint(v1.proPos,v2.proPos,v3.proPos))continue;
-//        if(shouleBeClip(v1,v2,v3))continue;
+        viewPortMat = getViewPortMatrix(0,0,width,height);
+        QTime t;
+        t.start();
+        for(int i = 0; i < indices.size();){
+            Vertex a,b,c;
+            a = vertices[indices[i++]];
+            b = vertices[indices[i++]];
+            c = vertices[indices[i++]];
 
-        v1.proPos = viewPortMat*v1.proPos;
-        v2.proPos = viewPortMat*v2.proPos;
-        v3.proPos = viewPortMat*v3.proPos;
-        // mode select
-        if(mode == wire){
-            bresenhamLine(v1,v2);
-            bresenhamLine(v2,v3);
-            bresenhamLine(v1,v3);
-        }
-        else if (mode == fill){
+            V2F v1,v2,v3;
+            v1 = nowShader->vertexShader(a);
+            v2 = nowShader->vertexShader(b);
+            v3 = nowShader->vertexShader(c);
+            perspectDiv(v1);
+            perspectDiv(v2);
+            perspectDiv(v3);
+
+            if(backFaceCullint(v1.proPos,v2.proPos,v3.proPos))continue;
+//            if(shouleBeClip(v1,v2,v3))continue;
+
+            v1.proPos = viewPortMat*v1.proPos;
+            v2.proPos = viewPortMat*v2.proPos;
+            v3.proPos = viewPortMat*v3.proPos;
+
             edgeWalking(v1,v2,v3);
         }
     }
 }
 
-void PipeLine::bresenhamLine(const V2F &from, const V2F &to)
-{
-    int dx = to.proPos.x - from.proPos.x;
-    int dy = to.proPos.y - from.proPos.y;
-    int stepX = 1, stepY = 1;
-    if(dx < 0){
-        stepX = -1;
-        dx = -dx;
-    }
-    if(dy < 0){
-        stepY = -1;
-        dy = -dy;
-    }
-    int d2x = 2*dx;
-    int d2y = 2*dy;
-    int d2y_d2x = d2y - d2x;
-    int drawX = from.proPos.x;
-    int drawY = from.proPos.y;
-    V2F temp;
-    if(dy <= dx){
-        int p = d2y-dx;
-        for(int i = 0; i <= dx; ++i){
-            // get color
-            temp = v2fLerp(from,to,static_cast<float>(i)/dx);
-            backBuffer->drawPixel(drawX,drawY,shader->fragmentShader(temp));
-            drawX+=stepX;
-            if(p<=0){
-                p+=d2y;
-            }
-            else if(p>0){
-                drawY+=stepY;
-                p+=d2y_d2x;
-            }
-        }
-    }
-    else if(dy > dx){
-        int p = d2x - dy;
-        for(int i = 0; i <= dy; ++i){
-            // get color
-            temp = v2fLerp(from,to,static_cast<float>(i)/dy);
-            backBuffer->drawPixel(drawX,drawY,shader->fragmentShader(temp));
-            drawY+=stepY;
-            if(p<=0){
-                p+=d2x;
-            }
-            else if(p>0){
-                drawX+=stepX;
-                p-=d2y_d2x;
-            }
-        }
-    }
+//void PipeLine::bresenhamLine(const V2F &from, const V2F &to)
+//{
+//    int dx = to.proPos.x - from.proPos.x;
+//    int dy = to.proPos.y - from.proPos.y;
+//    int stepX = 1, stepY = 1;
+//    if(dx < 0){
+//        stepX = -1;
+//        dx = -dx;
+//    }
+//    if(dy < 0){
+//        stepY = -1;
+//        dy = -dy;
+//    }
+//    int d2x = 2*dx;
+//    int d2y = 2*dy;
+//    int d2y_d2x = d2y - d2x;
+//    int drawX = from.proPos.x;
+//    int drawY = from.proPos.y;
+//    V2F temp;
+//    if(dy <= dx){
+//        int p = d2y-dx;
+//        for(int i = 0; i <= dx; ++i){
+//            // get color
+//            temp = v2fLerp(from,to,static_cast<float>(i)/dx);
+//            backBuffer->drawPixel(drawX,drawY,shader->fragmentShader(temp));
+//            drawX+=stepX;
+//            if(p<=0){
+//                p+=d2y;
+//            }
+//            else if(p>0){
+//                drawY+=stepY;
+//                p+=d2y_d2x;
+//            }
+//        }
+//    }
+//    else if(dy > dx){
+//        int p = d2x - dy;
+//        for(int i = 0; i <= dy; ++i){
+//            // get color
+//            temp = v2fLerp(from,to,static_cast<float>(i)/dy);
+//            backBuffer->drawPixel(drawX,drawY,shader->fragmentShader(temp));
+//            drawY+=stepY;
+//            if(p<=0){
+//                p+=d2x;
+//            }
+//            else if(p>0){
+//                drawX+=stepX;
+//                p-=d2y_d2x;
+//            }
+//        }
+//    }
 
-}
+//}
 
 void PipeLine::edgeWalking(const V2F &v1, const V2F &v2, const V2F &v3)
 {
@@ -207,7 +189,8 @@ void PipeLine::downTriangle(const V2F &v1, const V2F &v2, const V2F &v3)
         }
         newLeft = v2fLerp(left,bottom,factor);
         newRight = v2fLerp(right,bottom,factor);
-        newLeft.proPos.y = newRight.proPos.y = left.proPos.y + i-1;
+        newLeft.proPos.y = left.proPos.y + i;
+        newRight.proPos.y = left.proPos.y + i;
         scanLineDraw(newLeft,newRight);
     }
 }
@@ -256,9 +239,8 @@ void PipeLine::scanLineDraw(const V2F &left, const V2F &right)
         current.normal *= w;
         current.color *= w;
         current.texCoord *= w;
-        current.color = shader->fragmentShader(current);
+        current.color = nowShader->fragmentShader(current, (*model).meshes[meshIndex].material->texture);
         backBuffer->drawPixel(current.proPos.x,current.proPos.y,current.color);
-
     }
 }
 
