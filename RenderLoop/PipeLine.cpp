@@ -55,8 +55,6 @@ void PipeLine::draw()
         if(indices.empty())return;
 
         viewPortMat = getViewPortMatrix(0,0,width,height);
-        QTime t;
-        t.start();
         for(int i = 0; i < indices.size();){
             Vertex a,b,c;
             a = vertices[indices[i++]];
@@ -72,7 +70,7 @@ void PipeLine::draw()
             perspectDiv(v3);
 
             if(backFaceCullint(v1.proPos,v2.proPos,v3.proPos))continue;
-//            if(shouleBeClip(v1,v2,v3))continue;
+            if(shouleBeClip(v1,v2,v3))continue;
 
             v1.proPos = viewPortMat*v1.proPos;
             v2.proPos = viewPortMat*v2.proPos;

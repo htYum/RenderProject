@@ -3,6 +3,8 @@
 
 #include "baseshader.h"
 #include "RenderLoop/Model/Texture2D.h"
+#include "Light/DirectionLight.h"
+#include "RenderLoop/Global.h"
 
 class MyShader : public BaseShader
 {
@@ -10,8 +12,7 @@ private:
     mat4x4 model;
     mat4x4 view;
     mat4x4 projection;
-
-//    Texture2D* texture;
+    DirectionLight* dirLight;
 
 public:
     MyShader() = default;
@@ -22,7 +23,10 @@ public:
     virtual void setMat4Moedl(const mat4x4& _world);
     virtual void setMat4View(const mat4x4& _view);
     virtual void setMat4Projection(const mat4x4& _projection);
-//    void setTexture(Texture2D* _tex);
+
+    void setDirLight(DirectionLight* _light){
+        dirLight = _light;
+    }
 };
 
 #endif // MYSHADER_H

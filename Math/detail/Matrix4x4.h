@@ -44,7 +44,6 @@ public:
     bool operator!=(const mat4x4& rhs) const;
 
     mat4x4 operator-() const;
-
 };
 
 mat4x4 getViewPortMatrix(int x, int y, int width, int height);

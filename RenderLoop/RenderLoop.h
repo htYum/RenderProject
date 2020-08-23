@@ -4,7 +4,7 @@
 #include <QObject>
 #include "pipeline.h"
 #include "Model/mesh.h"
-#include "Control/Camera.h"
+#include "RenderLoop/Global.h"
 
 class RenderLoop : public QObject
 {
@@ -29,12 +29,6 @@ private:
     bool bStop;
     int fps;
     PipeLine* pipeLine;
-    Camera* camera;
-
-
-
-signals:
-
 };
 
 #endif // RENDERLOOP_H

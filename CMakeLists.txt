@@ -69,6 +69,16 @@ if(ANDROID)
     RenderLoop/Model/Model.cpp
     RenderLoop/Model/Material.h
     RenderLoop/Model/Material.cpp
+    Shader/Light/light.h
+    Shader/Light/light.cpp
+    Shader/Light/DirectionLight.h
+    Shader/Light/DirectionLight.cpp
+    Shader/Light/PointLight.h
+    Shader/Light/PointLight.cpp
+    RenderLoop/Global.h
+    RenderLoop/Global.cpp
+    Math/detail/Matrix3x3.h
+    Math/detail/Matrix3x3.cpp
   )
 else()
   add_executable(RenderProject
@@ -113,6 +123,16 @@ else()
       RenderLoop/Model/Model.cpp
       RenderLoop/Model/Material.h
       RenderLoop/Model/Material.cpp
+      Shader/Light/light.h
+      Shader/Light/light.cpp
+      Shader/Light/DirectionLight.h
+      Shader/Light/DirectionLight.cpp
+      Shader/Light/PointLight.h
+      Shader/Light/PointLight.cpp
+      RenderLoop/Global.h
+      RenderLoop/Global.cpp
+      Math/detail/Matrix3x3.h
+      Math/detail/Matrix3x3.cpp
   )
 endif()
 

@@ -107,9 +107,11 @@ mat4x4 translate(mat4x4& matrix, const vec3 &_trans)
 
 mat4x4 scale(mat4x4& matrix, const vec3 &_scale)
 {
-    matrix.value[0].x *= _scale.x;
-    matrix.value[1].y *= _scale.y;
-    matrix.value[2].z *= _scale.z;
+    mat4x4 result;
+    result.value[0].x = _scale.x;
+    result.value[1].y = _scale.y;
+    result.value[2].z = _scale.z;
+    matrix = matrix * result;
     return matrix;
 }
 
@@ -123,15 +125,17 @@ mat4x4 rotate(mat4x4& matrix, float angle, const vec3 &axis)
     float y = v.y;
     float z = v.z;
 
-    matrix.value[0].x *= x*x + (1-x*x)*cosx;
-    matrix.value[1].x = x*y*(1-cosx) - z*sinx;
-    matrix.value[2].x = x*z*(1-cosx) + y*sinx;
-    matrix.value[0].y = x*y*(1-cosx) + z*sinx;
-    matrix.value[1].y *= y*y + (1-y*y)*cosx;
-    matrix.value[2].y = y*z*(1-cosx) - x*sinx;
-    matrix.value[0].z = x*z*(1-cosx) - y*sinx;
-    matrix.value[1].z = y*z*(1-cosx) + x*sinx;
-    matrix.value[2].z *= z*z + (1-z*z)*cosx;
+    mat4x4 result;
+    result.value[0].x = x*x + (1-x*x)*cosx;
+    result.value[1].x = x*y*(1-cosx) - z*sinx;
+    result.value[2].x = x*z*(1-cosx) + y*sinx;
+    result.value[0].y = x*y*(1-cosx) + z*sinx;
+    result.value[1].y = y*y + (1-y*y)*cosx;
+    result.value[2].y = y*z*(1-cosx) - x*sinx;
+    result.value[0].z = x*z*(1-cosx) - y*sinx;
+    result.value[1].z = y*z*(1-cosx) + x*sinx;
+    result.value[2].z = z*z + (1-z*z)*cosx;
+    matrix = matrix * result;
 
     return matrix;
 }

@@ -1,16 +1,16 @@
 ﻿#include "renderloop.h"
 
 #include "RenderLoop/Model/Model.h"
+#include "Shader/Light/DirectionLight.h"
 
 RenderLoop::RenderLoop(int _w, int _h, QObject *parent):
     QObject(parent),
     width(_w),
     height(_h),
     nChannel(4),
-    fps(0),
     bStop(false),
-    pipeLine(nullptr),
-    camera(nullptr)
+    fps(0),
+    pipeLine(nullptr)
 {
     pipeLine = new PipeLine(_w,_h);
 }
@@ -86,28 +86,31 @@ void RenderLoop::loop()
 
     MyShader* shader = new MyShader();
 
-    camera = new Camera(vec3(0,0,2));
-
     pipeLine->setModel(myModel);
     pipeLine->setNowShader(shader);
-//    float angle = 0;
+    float angle = 0;
+
+    /*===============================*/
+    DirectionLight* dirLight = new DirectionLight();
+    shader->setDirLight(dirLight);
 
     while(!bStop){
         pipeLine->clearBuffer(vec4(0.2f,0.5f,0.85f,1.0f));
 
         mat4x4 model;
-//        rotate(model, angle, vec3(0,1.0,0));
-//        angle+=1.0f;
-//        if(angle>360.0f)angle = 0;
         scale(model, vec3(0.01f, 0.01f, 0.01f));
+        rotate(model, angle, vec3(0,1.0,0));
+        angle+=1.0f;
+        if(angle>360.0f)angle = 0;
         shader->setMat4Moedl(model);
+//        qDebug()<<dirLight->dir.x<<" "<<dirLight->dir.y<<" "<<dirLight->dir.z;
+//        qDebug()<<camera->getPostion().x<<" "<<camera->getPostion().y<<" "<<camera->getPostion().z;
 
         mat4x4 view;
         view= camera->getViewMatrix();
-//        view = lookAt(vec3(0,0,1),vec3(0,0,0), vec3(0,1,0));
         shader->setMat4View(view);
 
-        mat4x4 projection = perspective(45.0f, (float)width/(float)height, 0.1f, 100.0f);
+        mat4x4 projection = perspective(45.0f, static_cast<float>(width)/height, 0.1f, 100.0f);
         shader->setMat4Projection(projection);
 
         pipeLine->draw();
